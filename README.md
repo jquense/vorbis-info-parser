@@ -4,7 +4,7 @@ Vorbis Bit Stream Metadata parser
 A simple streaming parser for retrieving  metadata from a [vorbis](http://xiph.org/vorbis/doc/Vorbis_I_spec.html) stream.
 Nor generally useful by itself as vorbis streams tend to be nested inside other audio formats, such as OGG or FLAC files.
 More then likely you want one of those higher level parsers ([OGG parser](https://github.com/theporchrat/ogg-info-parser/) and
-                                                              [FLAC parser](https://github.com/theporchrat/flac-parser/))
+                                                              [FLAC parser](https://github.com/theporchrat/flac-info-parser/))
 
 ### Install
 
