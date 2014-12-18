@@ -43,7 +43,6 @@ describe('when parsing headers', function(){
                 this.end()
             }).on('end', function(){
                 tags.should.have.property('ALBUM' ).that.equals('my album')
-                tags.should.have.property('ALBUM' ).that.equals('my album')
                 tags.should.have.property('ARTIST' ).that.equals('an artist')
                 tags.should.have.property('GENRE' ).that.equals('Christian Gangsta Rap')
                 tags.should.have.property('TRACKNUMBER' ).that.equals('1')
