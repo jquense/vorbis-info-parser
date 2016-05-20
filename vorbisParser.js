@@ -1,7 +1,8 @@
 ﻿var inherits = require('util').inherits
   , Tokenizr = require('stream-tokenizr')
   , binary = require('./binaryHelpers')
-  , _ = require('lodash');
+  , assign = require('lodash/assign')
+  , pick = require('lodash/pick');
 
 
 module.exports = VorbisParser;
@@ -9,15 +10,15 @@ module.exports = VorbisParser;
 inherits(VorbisParser, Tokenizr);
 
 function VorbisParser(opts){
-    if ( !(this instanceof VorbisParser) ) 
+    if ( !(this instanceof VorbisParser) )
         return new VorbisParser();
 
-    opts = _.extend({}, opts || {}, { objectMode: true })
+    opts = assign({}, opts || {}, { objectMode: true })
 
     Tokenizr.call(this, opts)
-    
-    this.framingBit = typeof opts.framingBit !== 'boolean' 
-        ? true 
+
+    this.framingBit = typeof opts.framingBit !== 'boolean'
+        ? true
         : opts.framingBit
 
     this.loop(function(end){
@@ -26,18 +27,18 @@ function VorbisParser(opts){
             .tap(function(tok){
                 var headerType = tok.headerType;
 
-                if ( headerType === HEADER_TYPES.INFO ) 
+                if ( headerType === HEADER_TYPES.INFO )
                     this.parseInfoHeader()
                 else if ( headerType === HEADER_TYPES.COMMENT ) //comments
                     this.parseVorbisComments()
                 else{
                     this.push(null)
-                    return end();    
+                    return end();
                 }
             })
             .flush()
     })
-    
+
 }
 
 VorbisParser.prototype.parseInfoHeader = function(){
@@ -49,9 +50,10 @@ VorbisParser.prototype.parseInfoHeader = function(){
         .readUInt32LE('bitRateMin')
         .tap(function(tok){
             var self = this;
+            var fields = pick(tok, 'version', 'channels', 'sampleRate', 'bitRateMax','bitRateNominal', 'bitRateMin' )
 
-            _.each(_.pick(tok, 'version', 'channels', 'sampleRate', 'bitRateMax','bitRateNominal', 'bitRateMin' ), function(v, key){
-                self.push({ type: key, value: v })
+            Object.keys(fields).forEach(function(key) {
+              self.push({ type: key, value: fields[key] })
             })
 
             this.framingBit
@@ -78,12 +80,12 @@ VorbisParser.prototype.parseVorbisComments = function(){
 
                     str = str.slice(0, idx)
 
-                    value = str === 'METADATA_BLOCK_PICTURE' 
+                    value = str === 'METADATA_BLOCK_PICTURE'
                         ? VorbisParser.parsePicture(new Buffer(value, 'base64'))
                         : value;
 
                     self.push({
-                        type:  str, 
+                        type:  str,
                         value: value
                     })
                 })
@@ -143,5 +145,3 @@ var HEADER_TYPES = {
         COMMENT: 0x3,
         SETUP:   0x5
     }
-
-

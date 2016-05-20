@@ -41,7 +41,7 @@ describe('when parsing headers', function(){
             })
             .on('error', function(){
                 this.end()
-            }).on('end', function(){
+            }).on('finish', function(){
                 tags.should.have.property('ALBUM' ).that.equals('my album')
                 tags.should.have.property('ARTIST' ).that.equals('an artist')
                 tags.should.have.property('GENRE' ).that.equals('Christian Gangsta Rap')
@@ -56,5 +56,3 @@ describe('when parsing headers', function(){
             })
     })
 })
-
-

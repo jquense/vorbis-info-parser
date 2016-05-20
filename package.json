@@ -27,9 +27,9 @@
   },
   "homepage": "https://github.com/theporchrat/vorbis-info-parser",
   "dependencies": {
-    "stream-tokenizr": "~0.3.0",
-    "lodash": "~2.4.1",
-    "debuglog": "~1.0.1"
+    "debuglog": "~1.0.1",
+    "lodash": "^4.12.0",
+    "stream-tokenizr": "~0.3.0"
   },
   "devDependencies": {
     "chai": "~1.9.0",
